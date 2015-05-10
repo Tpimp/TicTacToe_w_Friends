@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>images/O.Bmp</file>
+        <file>images/X.bmp</file>
+        <file>TicTacToeBoard.qml</file>
+        <file>Dialog.qml</file>
+        <file>images/win.png</file>
+        <file>images/lose.png</file>
+    </qresource>
+</RCC>

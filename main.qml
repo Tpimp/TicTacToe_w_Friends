@@ -59,11 +59,39 @@ Window {
 
     }
     Dialog{
+        id: tttDialog
+        visible: false
         width:parent.width/2
         height: parent.height/3
         titleText:"You Lost!"
         text: "Too bad. play again?\n Click one below."
         anchors.centerIn: parent
         image: "/images/lose.png"
+        function openYouWonDialog()
+        {
+            tttDialog.titleText = "You Won!"
+            tttDialog.image =  "/images/win.png"
+            tttDialog.text  =  "Congragulations. Play Again?\n Click one below."
+            tttDialog.visible = true
+        }
+        function openYouLostDialog()
+        {
+            tttDialog.titleText = "You Lost!"
+            tttDialog.image =  "/images/lose.png"
+            tttDialog.text  =  "Too bad. Play Again?\n Click one below."
+            tttDialog.visible = true
+        }
+        function openCatsGameDialog()
+        {
+            tttDialog.titleText = "You Tie!"
+            tttDialog.image =  "/images/info.png"
+            tttDialog.text  =  "Play Again?\n Click one below."
+            tttDialog.visible = true
+        }
+        function openConnectionLostDialog()
+        {
+
+        }
+
     }
 }

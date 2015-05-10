@@ -46,6 +46,19 @@ Rectangle {
 
     Connections{
         target: TicTacToeGame
+        onGameOverWon:
+        {
+            tttDialog.openYouWonDialog();
+        }
+        onGameOverLoss:
+        {
+            tttDialog.openYouLostDialog();
+        }
+        onGameOverDraw:
+        {
+            tttDialog.openCatsGameDialog();
+        }
+
         onBoardUpdated:
         {
             var index;
@@ -53,7 +66,20 @@ Rectangle {
             {
                 setCellGraphic(index,board_data[index]);
             }
-            playersPiece = true;
+        }
+        onBoardReset:
+        {
+            cell0.source = ""
+            cell1.source = ""
+            cell2.source = ""
+            cell3.source = ""
+            cell4.source = ""
+            cell5.source = ""
+            cell6.source = ""
+            cell7.source = ""
+            cell8.source = ""
+            playersPiece = players_piece;
+            tttDialog.visible = false;
         }
         onValidMoveMade:
         {

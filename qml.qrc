@@ -7,5 +7,6 @@
         <file>Dialog.qml</file>
         <file>images/win.png</file>
         <file>images/lose.png</file>
+        <file>images/info.png</file>
     </qresource>
 </RCC>

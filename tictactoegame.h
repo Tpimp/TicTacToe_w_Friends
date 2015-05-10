@@ -23,7 +23,10 @@ signals:
     void   invalidMoveNotYourTurn();
     void   invalidMoveOutOfBounds();
     void   validMoveMade(int turns_left);
-    void   gameOver(bool won_game);
+    void   gameOverDraw();
+    void   gameOverWon();
+    void   gameOverLoss();
+    void   boardReset(bool players_piece);
     void   boardUpdated(QString board_data);
 
 public slots:
@@ -32,8 +35,10 @@ public slots:
 
 private:
     QString          boardToString();
+    void             findWinner(bool & game_over, bool & opponent_won, bool & draw);
     quint8           mBoardData[3][3];
     quint8           mTurnsLeft;
+    bool             mCurrentPiece;
     bool             mPlayersPiece;
 
 };

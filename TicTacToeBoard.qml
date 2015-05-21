@@ -8,6 +8,7 @@ Rectangle {
     property real pieceW: (board.width - (spacerWidth*2))/3
     property real pieceH: (board.height - (spacerWidth*2))/3
     property bool playersPiece: true
+    property bool currentTurn: false
     property real cellInQuestion: -1
     function setCellGraphic(cell_index, cell_data)
     {
@@ -35,7 +36,7 @@ Rectangle {
                 cell6.source = (cell_data > 0 ? (cell_data == 1 ? "/images/X.bmp":"/images/O.Bmp"):"")
             break;
             case 7:
-                 cell7.source = (cell_data > 0 ? (cell_data == 1 ? "/images/X.bmp":"/images/O.Bmp"):"")
+                 cell7.source = (cell_data > 0 ? (cell_data   == 1 ? "/images/X.bmp":"/images/O.Bmp"):"")
             break;
             case 8:
                 cell8.source = (cell_data > 0 ? (cell_data == 1 ? "/images/X.bmp":"/images/O.Bmp"):"")
@@ -79,44 +80,72 @@ Rectangle {
             cell7.source = ""
             cell8.source = ""
             playersPiece = players_piece;
+            currentTurn = true
+            if(playersPiece  != currentTurn)
+            {
+                board.enabled = false;
+            }
+            else
+            {
+                board.enabled = true;
+            }
             tttDialog.visible = false;
         }
         onValidMoveMade:
         {
-            switch(cellInQuestion)
+            switch(cell)
             {
                 case 0:
-                    cell0.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell0.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 1:
-                    cell1.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell1.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 2:
-                    cell2.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell2.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 3:
-                    cell3.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell3.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 4:
-                    cell4.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell4.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 5:
-                    cell5.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell5.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 6:
-                    cell6.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell6.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 7:
-                     cell7.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                     cell7.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 case 8:
-                    cell8.source = (playersPiece ? "/images/X.bmp":"/images/O.Bmp")
+                    cell8.source = (piece ? "/images/X.bmp":"/images/O.Bmp")
                 break;
                 default:break;
             }
 
-            playersPiece = !playersPiece;
+            if(playersPiece ==currentTurn)
+            {
+                if(isNetworkedGame)
+                {
+                    board.enabled = false;
+                    Server.sendMoveMade(playersPiece,cellInQuestion);
+                }
+                else
+                {
+                    playersPiece = !playersPiece
+                }
+            }
+            else
+            {
+                board.enabled = true;
+            }
+
+            currentTurn = !piece;
+
         }
+
     }
 
     Grid{ // define the Board Grid
@@ -144,7 +173,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 0;
-                    TicTacToeGame.makeMove(playersPiece,0,0);
+                    TicTacToeGame.makeMove(playersPiece,0);
                 }
             } // End CELL 0
         }
@@ -163,7 +192,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 1;
-                    TicTacToeGame.makeMove(playersPiece,0,1);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -182,7 +211,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 2;
-                    TicTacToeGame.makeMove(playersPiece,0,2);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -201,7 +230,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 3;
-                    TicTacToeGame.makeMove(playersPiece,1,0);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -219,7 +248,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 4;
-                    TicTacToeGame.makeMove(playersPiece,1,1);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -237,7 +266,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 5;
-                    TicTacToeGame.makeMove(playersPiece,1,2);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -255,7 +284,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 6;
-                    TicTacToeGame.makeMove(playersPiece,2,0);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -273,7 +302,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 7;
-                    TicTacToeGame.makeMove(playersPiece,2,1);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }
@@ -291,7 +320,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     cellInQuestion = 8;
-                    TicTacToeGame.makeMove(playersPiece,2,2);
+                    TicTacToeGame.makeMove(playersPiece,cellInQuestion);
                 }
             }
         }

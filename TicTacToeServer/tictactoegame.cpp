@@ -1,5 +1,4 @@
 #include "tictactoegame.h"
-#include <QDebug>
 
 TicTacToeGame::TicTacToeGame(int board_width, int board_height, QObject *parent)
     : QObject(parent),
@@ -21,8 +20,7 @@ void TicTacToeGame::setupNewGame(bool  piece_isX)
     mTurnsLeft = 9;
     mPlayersPiece =  piece_isX;
     mCurrentPiece = X_PIECE;
-    //qDebug() << "Starting a new game as " <<  (piece_isX ?"X":"O");
-    emit boardReset(mPlayersPiece);
+    emit boardReset(mCurrentPiece);
 }
 
 bool TicTacToeGame::isGameOver()
@@ -52,11 +50,11 @@ void TicTacToeGame::makeNetworkMove(bool piece, int cell)
     }
 
     //  if made it here, valid move
-    mBoardData[row][col]  = (piece ? X_PIECE:O_PIECE);
+    mBoardData[row][col]  = (mCurrentPiece ? X_PIECE:O_PIECE);
     mTurnsLeft--; // update mTurnsLeft
-    mCurrentPiece = !piece;
+    mCurrentPiece = !mCurrentPiece;
 
-    emit validMoveMade(piece,cell); // notify the frontend
+    emit validNetworkMoveMade(piece,cell); // notify the frontend
 
     // Check for win (or lose) game case
     bool is_over;
@@ -81,7 +79,7 @@ void TicTacToeGame::makeNetworkMove(bool piece, int cell)
 }
 
 
-void TicTacToeGame::makeMove(bool piece, int cell)
+bool TicTacToeGame::makeMove(bool piece, int cell)
 {
     int row(cell/3);
     int col(cell%3);
@@ -89,23 +87,23 @@ void TicTacToeGame::makeMove(bool piece, int cell)
     if(piece != mCurrentPiece) // check if current players turn
     {
         emit invalidMoveNotYourTurn(); // notify invalid move not your turn
-        return;
+        return false;
     }
     if(row > ROW_COL_MAX || col > ROW_COL_MAX) // invalid data gaurd
     {
         emit invalidMoveOutOfBounds(); // notify invalid move (OOB)
-        return;
+        return false;
     }
     if(mBoardData[row][col] != EMPTY) // if move is taken
     {
         emit invalidMoveTaken(); // notify invalid move location already taken
-        return;
+        return false;
     }
 
     //  if made it here, valid move
-    mBoardData[row][col]  = (piece ? X_PIECE:O_PIECE);
+    mBoardData[row][col]  = (mCurrentPiece ? X_PIECE:O_PIECE);
     mTurnsLeft--; // update mTurnsLeft
-    mCurrentPiece = !piece;
+    mCurrentPiece = !mCurrentPiece;
 
     emit validMoveMade(piece,cell); // notify the frontend
 
@@ -129,6 +127,7 @@ void TicTacToeGame::makeMove(bool piece, int cell)
             emit gameOverWon();
         }
     }
+    return true;
 
 }
 

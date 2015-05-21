@@ -8,5 +8,10 @@
         <file>images/win.png</file>
         <file>images/lose.png</file>
         <file>images/info.png</file>
+        <file>HomeView.qml</file>
+        <file>ConnectView.qml</file>
+        <file>LobbyView.qml</file>
+        <file>BoardView.qml</file>
+        <file>images/TicTacToeWFriends.png</file>
     </qresource>
 </RCC>

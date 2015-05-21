@@ -4,7 +4,8 @@ QT += qml quick
 
 SOURCES += main.cpp \
     clientconnection.cpp \
-    tictactoegame.cpp
+    tictactoegame.cpp \
+    clientiothread.cpp
 
 RESOURCES += qml.qrc
 
@@ -16,6 +17,11 @@ include(deployment.pri)
 
 HEADERS += \
     clientconnection.h \
-    tictactoegame.h
+    tictactoegame.h \
+    clientiothread.h
 
 CONFIG += c++11
+
+DISTFILES += \
+    HomeView.qml \
+    ConnectView.qml

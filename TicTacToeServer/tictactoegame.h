@@ -2,7 +2,6 @@
 #define TICTACTOEGAME_H
 
 #include <QObject>
-#include <QPixmap>
 
 #define  X_PIECE     1
 #define  O_PIECE     2
@@ -16,13 +15,19 @@ class TicTacToeGame : public QObject
 public:
     explicit TicTacToeGame(int board_width, int board_height, QObject *parent = 0);
     ~TicTacToeGame();
+    bool   playersTurn()
+    {
+        return mCurrentPiece;
+    }
 
     bool   isGameOver();
+    QString       boardToString();
 signals:
     void   invalidMoveTaken();
     void   invalidMoveNotYourTurn();
     void   invalidMoveOutOfBounds();
     void   validMoveMade(bool piece, int cell);
+    void   validNetworkMoveMade(bool piece, int cell);
     void   gameOverDraw();
     void   gameOverWon();
     void   gameOverLoss();
@@ -30,12 +35,11 @@ signals:
     void   boardUpdated(QString board_data);
 
 public slots:
-    void   makeMove(bool piece,int cell);
+    bool   makeMove(bool piece,int cell);
     void   makeNetworkMove(bool piece, int cell);
     void   setupNewGame(bool  piece_isX = true);
 
 private:
-    QString       boardToString();
     void              findWinner(bool & game_over, bool & opponent_won, bool & draw);
     quint8         mBoardData[3][3];
     quint8         mTurnsLeft;

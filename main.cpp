@@ -3,6 +3,10 @@
 #include <QQmlContext>
 #include <tictactoegame.h>
 #include <QScreen>
+#include "clientconnection.h"
+
+
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -33,10 +37,17 @@ int main(int argc, char *argv[])
 
     TicTacToeGame     ttt_game(screen_width, screen_height,&app);
     QQmlApplicationEngine engine;
+    ClientConnection       connection(&app);
+    QObject::connect(&connection, &ClientConnection::moveMade,
+                      &ttt_game,   &TicTacToeGame::makeNetworkMove);
+
     engine.rootContext()->setContextProperty("ScreenWidth",screen_width);
     engine.rootContext()->setContextProperty("ScreenHeight",screen_height);
     engine.rootContext()->setContextProperty("TicTacToeGame", &ttt_game);
+    engine.rootContext()->setContextProperty("Server", &connection);
+
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-    return app.exec();
+    return app.exec(); // begin Qt Event system loop
 }
